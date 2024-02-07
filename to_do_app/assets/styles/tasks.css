@@ -1,0 +1,203 @@
+/* Additional styles specific to tasks.html */
+.logout-btn {
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.logout-btn:hover {
+    background-color: #d35400;
+}
+
+/* Additional styles for the Add Task button */
+#addTaskBtn {
+    margin-top: 10px;
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+}
+
+#addTaskBtn:hover {
+    background-color: #d35400;
+}
+
+
+/* Delete account button styles */
+.delete-account-btn {
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.delete-account-btn:hover {
+    background-color: #d35400;
+}
+
+/* Updated styles for the delete account confirmation box */
+.delete-account-confirm-box {
+    display: none; /* Initially hide the confirmation box */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    width: 300px; /* Adjust the width as needed */
+    text-align: center;
+    z-index: 999; /* Ensure it appears on top of other content */
+}
+
+/* Style for the paragraph inside the confirmation box */
+.delete-account-confirm-box p {
+    margin-bottom: 15px;
+}
+
+/* Style for the buttons inside the confirmation box */
+.delete-account-confirm-box button {
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.delete-account-confirm-box button:hover {
+    background-color: #d35400;
+}
+
+/* Style for the buttons logout si delete account to be in the same place */
+.button-group {
+    display: flex;
+    gap: 10px; /* Adjust the space between buttons */
+}
+
+/* INCERCARE _______________________________________________________________*/
+/* Style for the task list */
+#taskList {
+    list-style: none; /* Remove default list styles */
+    padding: 0;
+}
+
+/* Style for each task list item */
+#taskList li {
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent black background */
+    padding: 15px; /* Add spacing around each task */
+    margin-bottom: 10px; /* Add space between tasks */
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; /* Add gap between task info and actions */
+}
+
+/* Style for task information */
+.task-info {
+    flex: 1; /* Grow to fill available space */
+}
+
+.task-info strong {
+    display: block; /* Display task name as a block element */
+    margin-bottom: 10px; /* Add space below task name */
+}
+
+.task-info p {
+    margin: 5px 0;
+}
+
+/* Style for task actions */
+.task-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Style for the delete button */
+.delete-task {
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    margin-left: auto; /* Push the delete button to the right */
+}
+
+.delete-task:hover {
+    background-color: #d35400;
+}
+
+/* Style for the status checkbox */
+.task-checkbox {
+    display: none; /* Hide the default checkbox */
+}
+
+/* Custom checkbox styles */
+.custom-checkbox {
+    display: flex;
+    align-items: center; /* Align checkbox vertically */
+    margin-right: 10px;
+}
+
+.custom-checkbox input {
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 10px; /* Space between custom checkbox and delete button */
+    position: relative;
+}
+
+/* On mouse-over, add a grey background color */
+.custom-checkbox:hover .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, change the background color */
+.custom-checkbox input:checked + .checkmark {
+    background-color: #d35400;
+}
+
+/* Style the checkmark/indicator */
+.checkmark:after {
+    content: "";
+    display: none;
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox input:checked + .checkmark:after {
+    display: block;
+}

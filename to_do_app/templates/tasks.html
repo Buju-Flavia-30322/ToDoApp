@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block buttons %}
+    <div class="button-group">
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+        <button id="delete-account-btn" class="delete-account-btn">Delete Account</button>
+    </div>
+
+
+    <div id="delete-account-confirm-box" class="delete-account-confirm-box" style="display: none;">
+    <p>Are you sure you want to delete your account?</p>
+    <button id="confirm-delete-btn">Yes</button>
+    <button id="cancel-delete-btn">No</button>
+    </div>
+    <script>
+        // Show delete account confirmation box
+        document.getElementById('delete-account-btn').addEventListener('click', function() {
+            document.getElementById('delete-account-confirm-box').style.display = 'block';
+        });
+
+        // Hide delete account confirmation box if "No" is clicked
+        document.getElementById('cancel-delete-btn').addEventListener('click', function() {
+            document.getElementById('delete-account-confirm-box').style.display = 'none';
+        });
+
+        // Redirect to delete account URL if "Yes" is clicked
+        document.getElementById('confirm-delete-btn').addEventListener('click', function() {
+            // Perform AJAX request to delete account URL
+            // Replace '/delete_account/' with your actual delete account URL
+            fetch('/delete_account/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => {
+                // Redirect to home page after successful account deletion
+                window.location.href = '/'; // Replace '/' with your home URL
+            })
+            .catch(error => {
+                console.error('Error deleting account:', error);
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h2>Your Tasks</h2>
+    <button id="addTaskBtn">Add Task</button>
+
+    <div id="addTaskForm" style="display: none;">
+        <form method="post" id="taskForm">
+            {% csrf_token %}
+            <label for="id_task">Task:</label><br>
+            <input type="text" id="id_task" name="task"><br>
+            <label for="id_description">Description:</label><br>
+            <textarea id="id_description" name="description"></textarea><br>
+            <input type="submit" value="Add">
+        </form>
+    </div>
+
+    <ul id="taskList">
+    {% for task in tasks %}
+        <li>
+            <div class="task-info">
+                <strong>{{ task.task }}</strong>
+                <p>Description: {{ task.description }}</p>
+                <p>Created at: {{ task.created_at }}</p>
+            </div>
+            <div class="task-actions">
+                <label class="custom-checkbox">
+                    <input type="checkbox" id="task_{{ task.id }}" {% if task.status %}checked{% endif %} data-task-id="{{ task.id }}" class="task-checkbox">
+                    <span class="checkmark"></span>
+                </label>
+                <button class="delete-task" data-task-id="{{ task.id }}">Delete</button>
+            </div>
+        </li>
+    {% empty %}
+        <li>No tasks available.</li>
+    {% endfor %}
+    </ul>
+
+    <link rel="stylesheet" href="{% static 'styles/tasks.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Toggle add task form
+            $('#addTaskBtn').click(function(e) {
+                e.preventDefault();
+                $('#addTaskForm').toggle();
+            });
+
+            // Submit task form
+            $('#taskForm').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    url: '{% url 'addtask' %}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#addTaskForm').hide();
+                            updateTasks(response.task);
+                        } else {
+                            console.error('Error adding task:', response.errors);
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error adding task');
+                    }
+                });
+            });
+
+            // Handle task deletion
+            $('#taskList').on('click', '.delete-task', function(e) {
+                e.preventDefault();
+                var taskElement = $(this).closest('li');
+                var taskId = $(this).data('task-id');
+                var csrftoken = getCookie('csrftoken');
+
+                $.ajax({
+                    url: `/delete_task/${taskId}/`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            taskElement.remove();
+                        } else {
+                            console.error('Error deleting task:', response.error);
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error deleting task');
+                    }
+                });
+            });
+
+            // Function to get CSRF token from cookie
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Handle task status change
+            $('#taskList').on('change', '.task-checkbox', function() {
+                var taskId = $(this).data('task-id');
+                var isChecked = $(this).is(':checked');
+
+                $.ajax({
+                    url: `/update_task_status/${taskId}/`,
+                    method: 'POST',
+                    data: {
+                        'is_checked': isChecked
+                    },
+                    success: function(response) {
+                        if (!response.success) {
+                            console.error('Error updating task status:', response.error);
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error updating task status');
+                    }
+                });
+            });
+
+            // Function to update tasks
+            function updateTasks(newTask) {
+                var newTaskHTML = `
+                    <li>
+                        <strong>${newTask.task}</strong><br>
+                        Description: ${newTask.description}<br>
+                        Status: <input type="checkbox" id="task_${newTask.id}" ${newTask.status ? 'checked' : ''} data-task-id="${newTask.id}" class="task-checkbox"><br>
+                        Created at: ${newTask.created_at}
+                        <button class="delete-task" data-task-id="${newTask.id}">Delete</button>
+                    </li>
+                `;
+                $('#taskList').append(newTaskHTML);
+            }
+        });
+
+    </script>
+
+{% endblock %}
+
+
+
+
+

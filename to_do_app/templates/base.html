@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlaToDoApp</title>
+    <link rel="stylesheet" href="{% static 'styles/homepage.css' %}">
+</head>
+<body>
+   <div class="title-bar">
+        <h1>ToDoApp</h1>
+        {% block buttons %}
+        <div class="button-container">
+            <button onclick="window.location.href='/register'">Register</button>
+            <button onclick="window.location.href='/login'">Login</button>
+        </div>
+        {% endblock %}
+    </div>
+    <div class="main-content">
+        {% block content %} <!--aici incarc dinamic fiecare continut -->
+        {% endblock %}
+    </div>
+</body>
+</html>

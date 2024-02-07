@@ -1,0 +1,37 @@
+body {
+    background-color: #333333;
+    color: white;
+}
+
+/* Title bar styles */
+.title-bar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between; /* Aligns items in the flex container */
+    align-items: center; /* Centers items vertically */
+}
+
+/* Button container styles */
+.button-container {
+    display: flex;
+    background-color: #444444; /* Dark grey background */
+    border-radius: 20px; /* Rounded corners */
+    overflow: hidden; /* Hides the overflowing border-radius */
+}
+
+.button-container button {
+    margin-left: 10px;
+    background-color: #444444;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    border-radius: 10px; /* Rounded corners for buttons */
+}
+
+.button-container button:hover {
+    background-color: #d35400; /* Darker orange */
+}
