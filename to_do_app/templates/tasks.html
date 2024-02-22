@@ -53,14 +53,22 @@
     <button id="addTaskBtn">Add Task</button>
 
     <div id="addTaskForm" style="display: none;">
-        <form method="post" id="taskForm">
-            {% csrf_token %}
-            <label for="id_task">Task:</label><br>
-            <input type="text" id="id_task" name="task"><br>
-            <label for="id_description">Description:</label><br>
-            <textarea id="id_description" name="description"></textarea><br>
-            <input type="submit" value="Add">
-        </form>
+    <form method="post" id="taskForm">
+        {% csrf_token %}
+        <label for="id_task">Task:</label><br>
+        <input type="text" id="id_task" name="task"><br>
+        <label for="id_description">Description:</label><br>
+        <textarea id="id_description" name="description"></textarea><br>
+        <label for="id_due_date">Due Date:</label><br>
+        <input type="date" id="id_due_date" name="due_date"><br>
+        <label for="id_priority">Priority:</label><br>
+        <select id="id_priority" name="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+        </select><br>
+        <input type="submit" value="Add">
+    </form>
     </div>
 
     <ul id="taskList">
@@ -69,6 +77,8 @@
             <div class="task-info">
                 <strong>{{ task.task }}</strong>
                 <p>Description: {{ task.description }}</p>
+                <p>Due Date: {{ task.due_date }}</p>
+                <p>Priority: {{ task.priority }}</p>
                 <p>Created at: {{ task.created_at }}</p>
             </div>
             <div class="task-actions">

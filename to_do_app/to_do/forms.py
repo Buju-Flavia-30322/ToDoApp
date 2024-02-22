@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import password_validators_help_text_html
 
@@ -51,7 +52,7 @@ class LoginForm(forms.Form):
 class AddTaskForm(forms.ModelForm):
     class Meta:
         model = TodoItem  # Your TodoItem model
-        fields = ['task', 'description', 'status']  # Fields of your TodoItem model
+        fields = ['task', 'description', 'status', 'priority', 'due_date']  # Fields of your TodoItem model
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)  # Pop the 'user' argument passed to the form
@@ -63,3 +64,7 @@ class AddTaskForm(forms.ModelForm):
         if commit:
             task.save()
         return task
+
+# incercare
+class CustomPasswordResetForm(PasswordResetForm):   # sa reseteze parola daca o uita
+    email = forms.EmailField(label="Email", max_length=254)

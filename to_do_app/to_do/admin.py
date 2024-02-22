@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import TodoItem
+from django.contrib.auth.models import User
 
-# Register your models here.
+admin.site.register(TodoItem)
+# superuser admin, admin@admin.com, flavia12345

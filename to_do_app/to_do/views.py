@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required  # cand stergi contu tre sa fi logat in a tau
+from django.contrib.auth.views import PasswordResetView
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages  # pt mesajul de deleted successfully
-from .forms import RegisterForm, AddTaskForm
+from .forms import RegisterForm, AddTaskForm, CustomPasswordResetForm
 from .forms import LoginForm
 from django.urls import reverse
 from django.shortcuts import render, redirect
@@ -68,6 +69,9 @@ def add_task_view(request):
         if form.is_valid():
             task = form.save(commit=False)
             task.user = request.user  # Assign the logged-in user to the task
+            # Set due date and priority from the form
+            task.due_date = form.cleaned_data['due_date']
+            task.priority = form.cleaned_data['priority']
             task.save()
 
             # Construct the task data to be sent back in the JSON response
@@ -76,7 +80,9 @@ def add_task_view(request):
                 'task': task.task,
                 'description': task.description,
                 'status': task.status,
-                'created_at': task.created_at.strftime('%Y-%m-%d %H:%M:%S')  # Format the datetime if needed
+                'created_at': task.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Format the datetime if needed
+                'due_date': task.due_date.strftime('%Y-%m-%d') if task.due_date else None,  # Format due date if set
+                'priority': task.priority,
             }
 
             return JsonResponse({'success': True, 'task': task_data})
@@ -123,5 +129,13 @@ def delete_account(request):
         return redirect('home')  # Redirect to home after account deletion
     else:
         return redirect('home')
+
+
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = 'password_reset_form.html'
+    email_template_name = 'password_reset_email.html'
+    success_url = '/password_reset/done/'
+
 
 # incercare
