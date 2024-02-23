@@ -170,42 +170,50 @@
             }
 
             // Handle task status change
-            $('#taskList').on('change', '.task-checkbox', function() {
-                var taskId = $(this).data('task-id');
-                var isChecked = $(this).is(':checked');
+        $('#taskList').on('change', '.task-checkbox', function() {
+            var taskId = $(this).data('task-id');
+            var isChecked = $(this).is(':checked');
 
-                $.ajax({
-                    url: `/update_task_status/${taskId}/`,
-                    method: 'POST',
-                    data: {
-                        'is_checked': isChecked
-                    },
-                    success: function(response) {
-                        if (!response.success) {
-                            console.error('Error updating task status:', response.error);
-                        }
-                    },
-                    error: function(error) {
-                        console.error('Error updating task status');
+            $.ajax({
+                url: `/update_task_status/${taskId}/`,
+                method: 'POST',
+                data: {
+                    'is_checked': isChecked
+                },
+                success: function(response) {
+                    if (!response.success) {
+                        console.error('Error updating task status:', response.error);
                     }
-                });
+                },
+                error: function(error) {
+                    console.error('Error updating task status');
+                }
             });
-
-            // Function to update tasks
-            function updateTasks(newTask) {
-                var newTaskHTML = `
-                    <li>
-                        <strong>${newTask.task}</strong><br>
-                        Description: ${newTask.description}<br>
-                        Status: <input type="checkbox" id="task_${newTask.id}" ${newTask.status ? 'checked' : ''} data-task-id="${newTask.id}" class="task-checkbox"><br>
-                        Created at: ${newTask.created_at}
-                        <button class="delete-task" data-task-id="${newTask.id}">Delete</button>
-                    </li>
-                `;
-                $('#taskList').append(newTaskHTML);
-            }
         });
 
+        // Function to update tasks
+        function updateTasks(newTask) {
+            var newTaskHTML = `
+                <li>
+                    <div class="task-info">
+                        <strong>${newTask.task}</strong>
+                        <p>Description: ${newTask.description}</p>
+                        <p>Due Date: ${newTask.due_date}</p>
+                        <p>Priority: ${newTask.priority}</p>
+                        <p>Created at: ${newTask.created_at}</p>
+                    </div>
+                    <div class="task-actions">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" id="task_${newTask.id}" ${newTask.status ? 'checked' : ''} data-task-id="${newTask.id}" class="task-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                        <button class="delete-task" data-task-id="${newTask.id}">Delete</button>
+                    </div>
+                </li>
+            `;
+            $('#taskList').append(newTaskHTML);
+        }
+    });
     </script>
 
 {% endblock %}

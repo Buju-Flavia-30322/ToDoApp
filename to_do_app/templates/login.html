@@ -6,14 +6,54 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Login</h2>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Login">
-    </form>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
-    <p><a href="{% url 'password_reset' %}">Forgot Password?</a></p>
+    <style>
+    /* CSS styles specific to the login page */
+    .login-box {
+        background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+        width: 300px;
+        margin: 50px auto 0;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-box h2 {
+        text-align: center;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .login-form input[type="submit"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        border: none;
+        background-color: #d35400; /* Orange background */
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .login-form input[type="submit"]:hover {
+        background-color: #a04000; /* Darker orange on hover */
+    }
+    </style>
+    <div class="login-box">
+        <h2>Login</h2>
+        <form method="post" action="{% url 'login' %}" class="login-form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Login">
+        </form>
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+        <p><a href="{% url 'password_reset' %}" style="color: #d35400;">Forgot Password?</a></p>
+    </div>
 {% endblock %}

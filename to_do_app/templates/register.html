@@ -5,11 +5,52 @@
     {# Override the buttons block to remove buttons in the home page #}
 {% endblock %}
 
-{%block content%}
-<h2>REGISTER New User</h2>
-<form method="post" action="{% url 'register' %}" enctype="multipart/form-data">
-    {% csrf_token %}  <!-- un detaliu de securitate ca la completarea formului mereu sa se schimbe la refresh sau register -->
-    {{ form | crispy }}
-    <input type="submit" value="Register">
-</form>
-{%endblock%}
+{% block content %}
+    <style>
+        /* CSS styles specific to the register page */
+        .register-box {
+            background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+            width: 300px;
+            margin: 50px auto 0; /* Centering horizontally and adding space at the top */
+            padding: 40px; /* Increased padding for a larger box */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adding a shadow effect */
+        }
+
+        .register-box h2 {
+            text-align: center;
+        }
+
+        .register-form input[type="text"],
+        .register-form input[type="password"] {
+            width: calc(100% - 22px); /* Adjusting width to accommodate padding and border */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .register-form input[type="submit"] {
+            width: calc(100% - 22px); /* Adjusting width to accommodate padding and border */
+            padding: 10px;
+            border: none;
+            background-color: #d35400; /* Orange background */
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register-form input[type="submit"]:hover {
+            background-color: #a04000; /* Darker orange on hover */
+        }
+    </style>
+
+    <div class="register-box">
+        <h2>Register New User</h2>
+        <form method="post" action="{% url 'register' %}" enctype="multipart/form-data" class="register-form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Register">
+        </form>
+    </div>
+{% endblock %}

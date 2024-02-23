@@ -65,6 +65,7 @@ class AddTaskForm(forms.ModelForm):
             task.save()
         return task
 
+
 # incercare
-class CustomPasswordResetForm(PasswordResetForm):   # sa reseteze parola daca o uita
+class CustomPasswordResetForm(PasswordResetForm):  # sa reseteze parola daca o uita
     email = forms.EmailField(label="Email", max_length=254)
